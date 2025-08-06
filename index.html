@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Player</title>
+    <title>Advanced Media Player</title>
     <!-- Use Tailwind CSS for a modern, responsive design -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -11,6 +11,9 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #1a202c; /* Dark background */
+            display: flex; /* Use flexbox for sidebar layout */
+            min-height: 100vh; /* Ensure full viewport height */
+            color: white; /* Default text color */
         }
         /* Custom progress bar styling for a more modern look */
         .progress-container {
@@ -26,75 +29,283 @@
             border-radius: 4px;
             transition: width 0.1s linear;
         }
+        /* Styling for active sidebar link */
+        .sidebar-link.active {
+            background-color: #2d3748; /* Darker gray for active link */
+            color: #4299e1; /* Blue for active text */
+        }
+        /* Styling for active settings sub-link */
+        .settings-sub-link.active {
+            background-color: #4a5568; /* Slightly lighter gray for active sub-link */
+            color: #4299e1;
+        }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
+<body class="flex">
 
-    <!-- Main Music Player Container -->
-    <div class="w-full max-w-sm bg-gray-800 rounded-xl shadow-2xl p-6 text-white transform transition-transform duration-300 hover:scale-105">
-        <h1 class="text-3xl font-bold mb-4 text-center">Music Player</h1>
-
-        <!-- Song Details -->
-        <div class="mb-6 text-center">
-            <h2 id="song-title" class="text-xl font-semibold truncate">Loading...</h2>
-            <p id="song-artist" class="text-gray-400">...</p>
-        </div>
-
-        <!-- Audio Element (hidden, JavaScript controls it) -->
-        <audio id="audio-player" src="" preload="auto"></audio>
-
-        <!-- Progress Bar -->
-        <div class="progress-container mb-4" id="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
-
-        <!-- Controls -->
-        <div class="flex items-center justify-center space-x-6">
-            <!-- Previous Button -->
-            <button id="prev-btn" class="p-3 text-gray-400 hover:text-white transition-colors duration-200 focus:outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
-                </svg>
-            </button>
-
-            <!-- Play/Pause Button -->
-            <button id="play-pause-btn" class="w-16 h-16 bg-blue-500 hover:bg-blue-600 text-white rounded-full flex items-center justify-center transition-transform duration-200 focus:outline-none transform scale-100 active:scale-95">
-                <!-- Play SVG -->
-                <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M8 5v14l11-7z"/>
-                </svg>
-                <!-- Pause SVG (initially hidden) -->
-                <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor" class="hidden">
-                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-                </svg>
-            </button>
-
-            <!-- Next Button -->
-            <button id="next-btn" class="p-3 text-gray-400 hover:text-white transition-colors duration-200 focus:outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18 6h-2v12h2zm-9.5 6l-8.5 6V6z"/>
-                </svg>
-            </button>
-        </div>
-
-        <!-- Volume Control -->
-        <div class="flex items-center mt-6 space-x-3">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="text-gray-400">
-                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.81 5 3.54 5 6.71s-2.11 5.9-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
-            </svg>
-            <input type="range" id="volume-slider" min="0" max="100" value="75" class="w-full h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer">
-        </div>
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-900 p-6 flex flex-col shadow-lg">
+        <h2 class="text-3xl font-bold mb-8 text-blue-400 text-center">Media Hub</h2>
+        <nav class="flex-grow">
+            <ul>
+                <li class="mb-4">
+                    <a href="#" id="nav-home" class="sidebar-link flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 active">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                        Home
+                    </a>
+                </li>
+                <li class="mb-4">
+                    <a href="#" id="nav-music" class="sidebar-link flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13m-6 0V6m0 0L9 6m12 3v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h10a2 2 0 012 2v4" />
+                        </svg>
+                        Music Player
+                    </a>
+                </li>
+                <li class="mb-4">
+                    <a href="#" id="nav-video" class="sidebar-link flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                        Video Player
+                    </a>
+                </li>
+                <li class="mb-4">
+                    <a href="#" id="nav-queue" class="sidebar-link flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                        Play Queue
+                    </a>
+                </li>
+                <li class="mb-4">
+                    <a href="#" id="nav-playlists" class="sidebar-link flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h2m0 0V3a2 2 0 012-2h2a2 2 0 012 2v2m0 0h2a2 2 0 012 2v2m0 0v2a2 2 0 01-2 2h-2m0 0v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2m0 0H7a2 2 0 01-2-2v-2z" />
+                        </svg>
+                        Playlists
+                    </a>
+                </li>
+                <li class="mb-4">
+                    <a href="#" id="nav-settings" class="sidebar-link flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        Settings
+                    </a>
+                </li>
+            </ul>
+        </nav>
         
-        <!-- Add Local Songs Button -->
-        <div class="flex justify-center mt-6">
-            <label for="file-input" class="cursor-pointer bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-200">
-                Add Local Songs
+        <!-- Add Local Files button in sidebar -->
+        <div class="mt-8">
+            <label for="file-input" class="cursor-pointer bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg text-center block transition-colors duration-200">
+                Add Local Files
             </label>
             <input type="file" id="file-input" multiple accept="audio/*" class="hidden">
         </div>
-    </div>
+    </aside>
 
-    <!-- JavaScript for Player Logic -->
+    <!-- Main Content Area -->
+    <main class="flex-grow flex items-center justify-center p-8 overflow-auto">
+        <!-- Content sections, initially only one visible -->
+        <div id="content-home" class="content-section text-center">
+            <h2 class="text-4xl font-bold mb-4">Welcome to Media Hub!</h2>
+            <p class="text-lg text-gray-400">Select a category from the sidebar to get started.</p>
+        </div>
+
+        <div id="content-music" class="content-section hidden w-full max-w-sm bg-gray-800 rounded-xl shadow-2xl p-6 text-white transform transition-transform duration-300">
+            <h1 class="text-3xl font-bold mb-4 text-center">Music Player</h1>
+
+            <!-- Search Bar for Music -->
+            <div class="mb-6">
+                <input type="text" id="music-search" placeholder="Search songs..." class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <!-- Song Details -->
+            <div class="mb-6 text-center">
+                <h2 id="song-title" class="text-xl font-semibold truncate">Loading...</h2>
+                <p id="song-artist" class="text-gray-400">...</p>
+            </div>
+
+            <!-- Audio Element (hidden, JavaScript controls it) -->
+            <audio id="audio-player" src="" preload="auto"></audio>
+
+            <!-- Progress Bar -->
+            <div class="progress-container mb-4" id="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex items-center justify-center space-x-6">
+                <!-- Previous Button -->
+                <button id="prev-btn" class="p-3 text-gray-400 hover:text-white transition-colors duration-200 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+                    </svg>
+                </button>
+
+                <!-- Play/Pause Button -->
+                <button id="play-pause-btn" class="w-16 h-16 bg-blue-500 hover:bg-blue-600 text-white rounded-full flex items-center justify-center transition-transform duration-200 focus:outline-none transform scale-100 active:scale-95">
+                    <!-- Play SVG -->
+                    <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    <!-- Pause SVG (initially hidden) -->
+                    <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor" class="hidden">
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                    </svg>
+                </button>
+
+                <!-- Next Button -->
+                <button id="next-btn" class="p-3 text-gray-400 hover:text-white transition-colors duration-200 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18 6h-2v12h2zm-9.5 6l-8.5 6V6z"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Volume Control -->
+            <div class="flex items-center mt-6 space-x-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="text-gray-400">
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.81 5 3.54 5 6.71s-2.11 5.9-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                </svg>
+                <input type="range" id="volume-slider" min="0" max="100" value="75" class="w-full h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer">
+            </div>
+        </div>
+
+        <div id="content-video" class="content-section hidden text-center">
+            <h2 class="text-4xl font-bold mb-4">Video Player</h2>
+            <p class="text-lg text-gray-400 mb-6">This section will feature a video player.</p>
+            <div class="w-full max-w-xl bg-gray-800 rounded-xl shadow-2xl p-4">
+                <video controls class="w-full rounded-lg" poster="https://placehold.co/600x400/333333/FFFFFF?text=Video+Placeholder">
+                    <!-- Add video sources here -->
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+
+        <div id="content-queue" class="content-section hidden text-center">
+            <h2 class="text-4xl font-bold mb-4">Play Queue</h2>
+            <p class="text-lg text-gray-400">Currently playing songs will appear here.</p>
+            <ul id="play-queue-list" class="mt-4 text-left max-w-md mx-auto bg-gray-800 p-4 rounded-lg">
+                <!-- Play queue items will be dynamically added here -->
+                <li class="text-gray-400">No songs in queue.</li>
+            </ul>
+        </div>
+
+        <div id="content-playlists" class="content-section hidden text-center">
+            <h2 class="text-4xl font-bold mb-4">Playlists</h2>
+            <p class="text-lg text-gray-400">Manage your music playlists here.</p>
+            <div class="mt-4 text-gray-400">
+                <p>No playlists created yet.</p>
+            </div>
+        </div>
+
+        <div id="content-settings" class="content-section hidden w-full max-w-2xl bg-gray-800 rounded-xl shadow-2xl p-6 text-white flex">
+            <!-- Settings Sub-sidebar/Tabs -->
+            <div class="w-48 pr-6 border-r border-gray-700">
+                <h2 class="text-2xl font-bold mb-6">Settings</h2>
+                <ul>
+                    <li class="mb-3">
+                        <a href="#" id="settings-personalization" class="settings-sub-link block p-2 rounded-lg hover:bg-gray-700 transition-colors duration-200 active">Personalization</a>
+                    </li>
+                    <li class="mb-3">
+                        <a href="#" id="settings-libraries" class="settings-sub-link block p-2 rounded-lg hover:bg-gray-700 transition-colors duration-200">Libraries</a>
+                    </li>
+                    <li class="mb-3">
+                        <a href="#" id="settings-about" class="settings-sub-link block p-2 rounded-lg hover:bg-gray-700 transition-colors duration-200">About App</a>
+                    </li>
+                    <li class="mb-3">
+                        <a href="#" id="settings-equalizer" class="settings-sub-link block p-2 rounded-lg hover:bg-gray-700 transition-colors duration-200">Equalizer</a>
+                    </li>
+                    <li class="mb-3">
+                        <a href="#" id="settings-media-hub-info" class="settings-sub-link block p-2 rounded-lg hover:bg-gray-700 transition-colors duration-200">Media Hub Info</a>
+                    </li>
+                    <li class="mb-3">
+                        <a href="#" id="settings-privacy" class="settings-sub-link block p-2 rounded-lg hover:bg-gray-700 transition-colors duration-200">Privacy</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Settings Content Area -->
+            <div class="flex-grow pl-6">
+                <div id="settings-content-personalization" class="settings-content-section">
+                    <h3 class="text-3xl font-bold mb-4">Personalization</h3>
+                    <p class="text-gray-400 mb-4">Customize the look and feel of your Media Hub.</p>
+                    <div class="mb-4">
+                        <label for="accent-color" class="block text-lg font-medium mb-2">Accent Color</label>
+                        <input type="color" id="accent-color" value="#4299e1" class="w-24 h-10 rounded-lg border-none cursor-pointer">
+                    </div>
+                    <div class="mb-4">
+                        <label for="app-theme" class="block text-lg font-medium mb-2">App Theme</label>
+                        <select id="app-theme" class="w-full p-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="dark">Dark Theme</option>
+                            <option value="light" disabled>Light Theme (Coming Soon)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="settings-content-libraries" class="settings-content-section hidden">
+                    <h3 class="text-3xl font-bold mb-4">Libraries</h3>
+                    <p class="text-gray-400">Manage your media libraries.</p>
+                    <ul class="list-disc list-inside mt-4 text-gray-300">
+                        <li>Music Library: Scan and organize your audio files.</li>
+                        <li>Video Library: Manage your video collection.</li>
+                    </ul>
+                    <button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200">Scan for New Media</button>
+                </div>
+
+                <div id="settings-content-about" class="settings-content-section hidden">
+                    <h3 class="text-3xl font-bold mb-4">About Media Hub</h3>
+                    <p class="text-gray-400 mb-2">Version: 1.0.0</p>
+                    <p class="text-gray-400 mb-2">Developed by: Gemini AI</p>
+                    <p class="text-gray-400">This is a simple web-based media player for demonstration purposes.</p>
+                </div>
+
+                <div id="settings-content-equalizer" class="settings-content-section hidden">
+                    <h3 class="text-3xl font-bold mb-4">Equalizer</h3>
+                    <p class="text-gray-400">Adjust audio frequencies for a personalized listening experience.</p>
+                    <div class="mt-4 text-gray-300">
+                        <p>Equalizer controls will be implemented here.</p>
+                        <ul class="list-disc list-inside mt-2">
+                            <li>Bass Boost</li>
+                            <li>Treble Boost</li>
+                            <li>Custom Presets</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="settings-content-media-hub-info" class="settings-content-section hidden">
+                    <h3 class="text-3xl font-bold mb-4">Media Hub Information</h3>
+                    <p class="text-gray-400">General information and statistics about your media collection.</p>
+                    <ul class="list-disc list-inside mt-4 text-gray-300">
+                        <li>Total Songs: <span id="total-songs">0</span></li>
+                        <li>Total Videos: <span id="total-videos">0</span></li>
+                        <li>Last Updated: Never</li>
+                    </ul>
+                </div>
+
+                <div id="settings-content-privacy" class="settings-content-section hidden">
+                    <h3 class="text-3xl font-bold mb-4">Privacy Settings</h3>
+                    <p class="text-gray-400">Manage your privacy preferences.</p>
+                    <div class="mt-4">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600 rounded">
+                            <span class="ml-2 text-gray-300">Enable anonymous usage data collection</span>
+                        </label>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2">This helps us improve the app. No personal data is collected.</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- JavaScript for Player Logic and Sidebar -->
     <script>
         // Get references to all the necessary DOM elements
         const audioPlayer = document.getElementById('audio-player');
@@ -109,6 +320,29 @@
         const progressContainer = document.getElementById('progress-container');
         const volumeSlider = document.getElementById('volume-slider');
         const fileInput = document.getElementById('file-input');
+        const musicSearchInput = document.getElementById('music-search');
+        const playQueueList = document.getElementById('play-queue-list');
+        const totalSongsEl = document.getElementById('total-songs'); // New element for total songs
+
+        // Sidebar navigation elements
+        const navHome = document.getElementById('nav-home');
+        const navMusic = document.getElementById('nav-music');
+        const navVideo = document.getElementById('nav-video');
+        const navQueue = document.getElementById('nav-queue');
+        const navPlaylists = document.getElementById('nav-playlists');
+        const navSettings = document.getElementById('nav-settings');
+        const contentSections = document.querySelectorAll('.content-section');
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+
+        // Settings sub-navigation elements
+        const settingsPersonalizationLink = document.getElementById('settings-personalization');
+        const settingsLibrariesLink = document.getElementById('settings-libraries');
+        const settingsAboutLink = document.getElementById('settings-about');
+        const settingsEqualizerLink = document.getElementById('settings-equalizer');
+        const settingsMediaHubInfoLink = document.getElementById('settings-media-hub-info');
+        const settingsPrivacyLink = document.getElementById('settings-privacy');
+        const settingsContentSections = document.querySelectorAll('.settings-content-section');
+        const settingsSubLinks = document.querySelectorAll('.settings-sub-link');
 
         // Define an initial list of songs
         const initialSongList = [
@@ -130,23 +364,54 @@
         ];
 
         let songList = [...initialSongList]; // Use a copy of the initial list
+        let filteredSongList = [...initialSongList]; // List to be filtered by search
         let currentSongIndex = 0;
         let isPlaying = false;
 
+        // Function to update the play queue display
+        function updatePlayQueueDisplay() {
+            playQueueList.innerHTML = ''; // Clear existing list
+            if (filteredSongList.length === 0) {
+                playQueueList.innerHTML = '<li class="text-gray-400">No songs in queue.</li>';
+                return;
+            }
+            filteredSongList.forEach((song, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${index + 1}. ${song.title} - ${song.artist}`;
+                li.classList.add('p-2', 'border-b', 'border-gray-700', 'last:border-b-0');
+                if (index === currentSongIndex) {
+                    li.classList.add('text-blue-400', 'font-semibold');
+                }
+                playQueueList.appendChild(li);
+            });
+        }
+
+
         // Function to load a song into the player
         function loadSong(index) {
-            const song = songList[index];
+            // Ensure index is valid for filteredSongList
+            if (filteredSongList.length === 0) {
+                songTitleEl.textContent = "No songs available";
+                songArtistEl.textContent = "";
+                audioPlayer.src = "";
+                progressBar.style.width = '0%';
+                pauseSong(); // Ensure player is paused if no songs
+                return;
+            }
+
+            const song = filteredSongList[index];
             audioPlayer.src = song.src;
             songTitleEl.textContent = song.title;
             songArtistEl.textContent = song.artist;
             // Reset the progress bar when a new song is loaded
             progressBar.style.width = '0%';
+            updatePlayQueueDisplay(); // Update play queue when song changes
         }
 
         // Function to play the song
         function playSong() {
             // Check if there are songs to play
-            if (songList.length > 0) {
+            if (filteredSongList.length > 0) {
                 isPlaying = true;
                 audioPlayer.play().catch(error => {
                     console.error("Autoplay was prevented:", error);
@@ -177,8 +442,8 @@
 
         // Event listener for the previous button
         prevBtn.addEventListener('click', () => {
-            if (songList.length > 0) {
-                currentSongIndex = (currentSongIndex - 1 + songList.length) % songList.length;
+            if (filteredSongList.length > 0) {
+                currentSongIndex = (currentSongIndex - 1 + filteredSongList.length) % filteredSongList.length;
                 loadSong(currentSongIndex);
                 playSong();
             }
@@ -186,8 +451,8 @@
 
         // Event listener for the next button
         nextBtn.addEventListener('click', () => {
-            if (songList.length > 0) {
-                currentSongIndex = (currentSongIndex + 1) % songList.length;
+            if (filteredSongList.length > 0) {
+                currentSongIndex = (currentSongIndex + 1) % filteredSongList.length;
                 loadSong(currentSongIndex);
                 playSong();
             }
@@ -195,16 +460,20 @@
 
         // Event listener to update the progress bar
         audioPlayer.addEventListener('timeupdate', () => {
-            const progressPercent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-            progressBar.style.width = `${progressPercent}%`;
+            if (audioPlayer.duration) {
+                const progressPercent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                progressBar.style.width = `${progressPercent}%`;
+            }
         });
 
         // Event listener to allow seeking by clicking on the progress bar
         progressContainer.addEventListener('click', (e) => {
-            const width = progressContainer.clientWidth;
-            const clickX = e.offsetX;
-            const duration = audioPlayer.duration;
-            audioPlayer.currentTime = (clickX / width) * duration;
+            if (audioPlayer.duration) {
+                const width = progressContainer.clientWidth;
+                const clickX = e.offsetX;
+                const duration = audioPlayer.duration;
+                audioPlayer.currentTime = (clickX / width) * duration;
+            }
         });
 
         // Event listener for the volume slider
@@ -214,7 +483,7 @@
 
         // Event listener to play the next song automatically when the current one ends
         audioPlayer.addEventListener('ended', () => {
-            currentSongIndex = (currentSongIndex + 1) % songList.length;
+            currentSongIndex = (currentSongIndex + 1) % filteredSongList.length;
             loadSong(currentSongIndex);
             playSong();
         });
@@ -226,22 +495,128 @@
                 songList = []; // Clear the existing song list
                 for (const file of files) {
                     const song = {
-                        title: file.name,
-                        artist: "Local Artist", // Placeholder for local songs
+                        title: file.name.replace(/\.[^/.]+$/, ""), // Remove file extension for title
+                        artist: "Local Device", // Placeholder for local songs
                         src: URL.createObjectURL(file) // Create a temporary URL for the file
                     };
                     songList.push(song);
                 }
-                
+                filteredSongList = [...songList]; // Reset filtered list
                 currentSongIndex = 0; // Start with the first added song
                 loadSong(currentSongIndex);
                 playSong();
+                updatePlayQueueDisplay(); // Update play queue
+                totalSongsEl.textContent = songList.length; // Update total songs count
+                showContent('music'); // Switch to music player view
             }
         });
 
-        // Initial load of the first song
+        // Function to filter songs based on search input
+        musicSearchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            filteredSongList = songList.filter(song => 
+                song.title.toLowerCase().includes(searchTerm) ||
+                song.artist.toLowerCase().includes(searchTerm)
+            );
+            currentSongIndex = 0; // Reset index to start of filtered list
+            loadSong(currentSongIndex);
+            if (isPlaying) {
+                playSong();
+            } else {
+                pauseSong(); // Keep paused if it was paused
+            }
+            updatePlayQueueDisplay(); // Update play queue based on search
+        });
+
+        // --- Sidebar Navigation Logic ---
+        function showContent(id) {
+            contentSections.forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(`content-${id}`).classList.remove('hidden');
+
+            sidebarLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            document.getElementById(`nav-${id}`).classList.add('active');
+            
+            // If navigating to settings, show personalization by default
+            if (id === 'settings') {
+                showSettingsSubContent('personalization');
+            }
+        }
+
+        navHome.addEventListener('click', (e) => {
+            e.preventDefault();
+            showContent('home');
+        });
+        navMusic.addEventListener('click', (e) => {
+            e.preventDefault();
+            showContent('music');
+        });
+        navVideo.addEventListener('click', (e) => {
+            e.preventDefault();
+            showContent('video');
+        });
+        navQueue.addEventListener('click', (e) => {
+            e.preventDefault();
+            showContent('queue');
+            updatePlayQueueDisplay(); // Ensure queue is updated when viewed
+        });
+        navPlaylists.addEventListener('click', (e) => {
+            e.preventDefault();
+            showContent('playlists');
+        });
+        navSettings.addEventListener('click', (e) => {
+            e.preventDefault();
+            showContent('settings');
+        });
+
+        // --- Settings Sub-Navigation Logic ---
+        function showSettingsSubContent(id) {
+            settingsContentSections.forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(`settings-content-${id}`).classList.remove('hidden');
+
+            settingsSubLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            document.getElementById(`settings-${id}`).classList.add('active');
+        }
+
+        settingsPersonalizationLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showSettingsSubContent('personalization');
+        });
+        settingsLibrariesLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showSettingsSubContent('libraries');
+        });
+        settingsAboutLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showSettingsSubContent('about');
+        });
+        settingsEqualizerLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showSettingsSubContent('equalizer');
+        });
+        settingsMediaHubInfoLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showSettingsSubContent('media-hub-info');
+        });
+        settingsPrivacyLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showSettingsSubContent('privacy');
+        });
+
+
+        // Initial load of the first song and set initial view
         window.onload = function() {
             loadSong(currentSongIndex);
+            updatePlayQueueDisplay();
+            totalSongsEl.textContent = songList.length; // Initialize total songs count
+            showContent('home'); // Show home page by default
         };
     </script>
 
