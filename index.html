@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Advanced Media Player</title>
-    <!-- Use Tailwind CSS for a modern, responsive design -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
@@ -43,7 +42,6 @@
 </head>
 <body class="flex">
 
-    <!-- Sidebar -->
     <aside class="w-64 bg-gray-900 p-6 flex flex-col shadow-lg">
         <h2 class="text-3xl font-bold mb-8 text-blue-400 text-center">Media Hub</h2>
         <nav class="flex-grow">
@@ -100,7 +98,6 @@
             </ul>
         </nav>
         
-        <!-- Add Local Files button in sidebar -->
         <div class="mt-8">
             <label for="file-input" class="cursor-pointer bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg text-center block transition-colors duration-200">
                 Add Local Files
@@ -109,9 +106,7 @@
         </div>
     </aside>
 
-    <!-- Main Content Area -->
     <main class="flex-grow flex items-center justify-center p-8 overflow-auto">
-        <!-- Content sections, initially only one visible -->
         <div id="content-home" class="content-section text-center">
             <h2 class="text-4xl font-bold mb-4">Welcome to Media Hub!</h2>
             <p class="text-lg text-gray-400">Select a category from the sidebar to get started.</p>
@@ -120,47 +115,37 @@
         <div id="content-music" class="content-section hidden w-full max-w-sm bg-gray-800 rounded-xl shadow-2xl p-6 text-white transform transition-transform duration-300">
             <h1 class="text-3xl font-bold mb-4 text-center">Music Player</h1>
 
-            <!-- Search Bar for Music -->
             <div class="mb-6">
                 <input type="text" id="music-search" placeholder="Search songs..." class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
-            <!-- Song Details -->
             <div class="mb-6 text-center">
                 <h2 id="song-title" class="text-xl font-semibold truncate">Loading...</h2>
                 <p id="song-artist" class="text-gray-400">...</p>
             </div>
 
-            <!-- Audio Element (hidden, JavaScript controls it) -->
             <audio id="audio-player" src="" preload="auto"></audio>
 
-            <!-- Progress Bar -->
             <div class="progress-container mb-4" id="progress-container">
                 <div class="progress-bar" id="progress-bar"></div>
             </div>
 
-            <!-- Controls -->
             <div class="flex items-center justify-center space-x-6">
-                <!-- Previous Button -->
                 <button id="prev-btn" class="p-3 text-gray-400 hover:text-white transition-colors duration-200 focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
                     </svg>
                 </button>
 
-                <!-- Play/Pause Button -->
                 <button id="play-pause-btn" class="w-16 h-16 bg-blue-500 hover:bg-blue-600 text-white rounded-full flex items-center justify-center transition-transform duration-200 focus:outline-none transform scale-100 active:scale-95">
-                    <!-- Play SVG -->
                     <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M8 5v14l11-7z"/>
                     </svg>
-                    <!-- Pause SVG (initially hidden) -->
                     <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor" class="hidden">
                         <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
                     </svg>
                 </button>
 
-                <!-- Next Button -->
                 <button id="next-btn" class="p-3 text-gray-400 hover:text-white transition-colors duration-200 focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M18 6h-2v12h2zm-9.5 6l-8.5 6V6z"/>
@@ -168,7 +153,6 @@
                 </button>
             </div>
 
-            <!-- Volume Control -->
             <div class="flex items-center mt-6 space-x-3">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="text-gray-400">
                     <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.81 5 3.54 5 6.71s-2.11 5.9-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
@@ -182,31 +166,26 @@
             <p class="text-lg text-gray-400 mb-6">This section will feature a video player.</p>
             <div class="w-full max-w-xl bg-gray-800 rounded-xl shadow-2xl p-4">
                 <video controls class="w-full rounded-lg" poster="https://placehold.co/600x400/333333/FFFFFF?text=Video+Placeholder">
-                    <!-- Add video sources here -->
                     Your browser does not support the video tag.
                 </video>
             </div>
         </div>
-
-        <div id="content-queue" class="content-section hidden text-center">
+        <div id="content-queue" class="content-section hidden text-center w-full max-w-2xl">
             <h2 class="text-4xl font-bold mb-4">Play Queue</h2>
             <p class="text-lg text-gray-400">Currently playing songs will appear here.</p>
-            <ul id="play-queue-list" class="mt-4 text-left max-w-md mx-auto bg-gray-800 p-4 rounded-lg">
-                <!-- Play queue items will be dynamically added here -->
+            <ul id="play-queue-list" class="mt-4 text-left w-full mx-auto bg-gray-800 p-4 rounded-lg">
                 <li class="text-gray-400">No songs in queue.</li>
             </ul>
         </div>
-
-        <div id="content-playlists" class="content-section hidden text-center">
+        <div id="content-playlists" class="content-section hidden text-center w-full max-w-2xl">
             <h2 class="text-4xl font-bold mb-4">Playlists</h2>
             <p class="text-lg text-gray-400">Manage your music playlists here.</p>
-            <div class="mt-4 text-gray-400">
+            <div id="playlists-container" class="mt-4 text-gray-400 text-left">
                 <p>No playlists created yet.</p>
             </div>
         </div>
 
         <div id="content-settings" class="content-section hidden w-full max-w-2xl bg-gray-800 rounded-xl shadow-2xl p-6 text-white flex">
-            <!-- Settings Sub-sidebar/Tabs -->
             <div class="w-48 pr-6 border-r border-gray-700">
                 <h2 class="text-2xl font-bold mb-6">Settings</h2>
                 <ul>
@@ -231,7 +210,6 @@
                 </ul>
             </div>
 
-            <!-- Settings Content Area -->
             <div class="flex-grow pl-6">
                 <div id="settings-content-personalization" class="settings-content-section">
                     <h3 class="text-3xl font-bold mb-4">Personalization</h3>
@@ -305,7 +283,6 @@
 
     </main>
 
-    <!-- JavaScript for Player Logic and Sidebar -->
     <script>
         // Get references to all the necessary DOM elements
         const audioPlayer = document.getElementById('audio-player');
@@ -322,6 +299,7 @@
         const fileInput = document.getElementById('file-input');
         const musicSearchInput = document.getElementById('music-search');
         const playQueueList = document.getElementById('play-queue-list');
+        const playlistsContainer = document.getElementById('playlists-container');
         const totalSongsEl = document.getElementById('total-songs'); // New element for total songs
 
         // Sidebar navigation elements
@@ -367,6 +345,42 @@
         let filteredSongList = [...initialSongList]; // List to be filtered by search
         let currentSongIndex = 0;
         let isPlaying = false;
+        
+        // New data structure for playlists
+        let playlists = {};
+
+        // Function to add a song to a playlist
+        function addSongToPlaylist(song) {
+            const playlistName = prompt("Enter the name of the playlist/folder:");
+            if (playlistName) {
+                if (!playlists[playlistName]) {
+                    playlists[playlistName] = []; // Create a new playlist if it doesn't exist
+                }
+                playlists[playlistName].push(song);
+                alert(`'${song.title}' added to playlist '${playlistName}'.`);
+                updatePlaylistsDisplay(); // Update the playlists view
+            }
+        }
+        
+        // Function to update the playlists display
+        function updatePlaylistsDisplay() {
+            playlistsContainer.innerHTML = '';
+            
+            if (Object.keys(playlists).length === 0) {
+                playlistsContainer.innerHTML = '<p>No playlists created yet.</p>';
+                return;
+            }
+
+            for (const name in playlists) {
+                const playlistItem = document.createElement('div');
+                playlistItem.classList.add('mb-4', 'p-4', 'bg-gray-800', 'rounded-lg', 'shadow');
+                playlistItem.innerHTML = `<h3 class="text-xl font-semibold text-blue-400">${name}</h3>
+                                          <ul class="list-disc list-inside mt-2">
+                                            ${playlists[name].map(song => `<li>${song.title} - ${song.artist}</li>`).join('')}
+                                          </ul>`;
+                playlistsContainer.appendChild(playlistItem);
+            }
+        }
 
         // Function to update the play queue display
         function updatePlayQueueDisplay() {
@@ -377,11 +391,23 @@
             }
             filteredSongList.forEach((song, index) => {
                 const li = document.createElement('li');
-                li.textContent = `${index + 1}. ${song.title} - ${song.artist}`;
-                li.classList.add('p-2', 'border-b', 'border-gray-700', 'last:border-b-0');
+                li.classList.add('flex', 'items-center', 'justify-between', 'p-2', 'border-b', 'border-gray-700', 'last:border-b-0');
                 if (index === currentSongIndex) {
                     li.classList.add('text-blue-400', 'font-semibold');
                 }
+
+                const songInfo = document.createElement('span');
+                songInfo.textContent = `${index + 1}. ${song.title} - ${song.artist}`;
+                li.appendChild(songInfo);
+                
+                const addButton = document.createElement('button');
+                addButton.textContent = "Add to Playlist";
+                addButton.classList.add('ml-4', 'text-sm', 'bg-blue-500', 'hover:bg-blue-600', 'text-white', 'py-1', 'px-2', 'rounded');
+                addButton.onclick = () => {
+                    addSongToPlaylist(song);
+                };
+                li.appendChild(addButton);
+                
                 playQueueList.appendChild(li);
             });
         }
@@ -566,6 +592,7 @@
         navPlaylists.addEventListener('click', (e) => {
             e.preventDefault();
             showContent('playlists');
+            updatePlaylistsDisplay(); // Ensure playlists are updated when viewed
         });
         navSettings.addEventListener('click', (e) => {
             e.preventDefault();
@@ -615,10 +642,10 @@
         window.onload = function() {
             loadSong(currentSongIndex);
             updatePlayQueueDisplay();
+            updatePlaylistsDisplay();
             totalSongsEl.textContent = songList.length; // Initialize total songs count
-            showContent('home'); // Show home page by default
-        };
+            showContent('home'); // Show home page
+        }
     </script>
-
 </body>
 </html>
